@@ -5,12 +5,15 @@
     <title>lol this is a login hehe</title>
 </head>
 <body>
-    <form action="/site/login" method="post">
+    <form action="/site/addtrip" method="post">
         {% csrf_token %}
-        <input name="username" placeholder="username">
-        <input name="password" type="password" placeholder="password">
+        <input name="trip_name" placeholder="trip name">
+        <input name="cities[]" placeholder="city name">
+        <input name="cities[]" placeholder="city name">
+        <input name="cities[]" placeholder="city name">
+        <input name="cities[]" placeholder="city name">
+        <input name="cities[]" placeholder="city name">
         <input type="submit" value="OK">
-
     </form>
 </body>
 </html>
