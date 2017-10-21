@@ -47,6 +47,7 @@ def user_registration(request):
 
     User.objects.create_user(username=username, email=email,
                              first_name=firstname, last_name=lastname, password=password)
+    return HttpResponse("registration was successful")
 
 
 
