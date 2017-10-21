@@ -55,19 +55,3 @@ def user_registration(request):
     User.objects.create_user(username=username, email=email,
                              first_name=firstname, last_name=lastname, password=password)
     return HttpResponse("registration was successful")
-
-
-
-@login_required
-def hidden(request):
-    return HttpResponse("hidden")
-
-
-def yay(request):
-    html = "<html><body> Successful login </body></html>"
-    return HttpResponse(html)
-
-
-def nay(request):
-    html = "<html><body> Incorrect username, or password </body></html>"
-    return HttpResponse(html)
