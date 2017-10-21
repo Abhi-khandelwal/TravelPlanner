@@ -1,4 +1,3 @@
-# IMPORTS
 import requests
 import datetime
 from itertools import permutations
@@ -7,7 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 
-# CONSTANTS
+
 SKY_SCANNER_API_KEY = "ha696723343441434034465280137182"
 HEADER = {'Accept': 'application/json'}
 USER_COUNTRY = "HU"
@@ -19,10 +18,10 @@ class City(models.Model):
 
     @staticmethod
     def add(city_name):
-        response = requests.get(getCityCodeRequest(city_name), headers=HEADER)
+        response = requests.get(get_city_code_request(city_name), headers=HEADER)
         data = response.json()
         for p in data['Places']:
-            if (city_name.lower() == p['PlaceName'].lower() and city_name[0].lower() == p['CityId'][0].lower()):
+            if city_name.lower() == p['PlaceName'].lower() and city_name[0].lower() == p['CityId'][0].lower():
                 city = City(name=city_name, api_code=p['CityId'][:4])
                 city.save()
                 return city
@@ -36,15 +35,15 @@ class City(models.Model):
         except ObjectDoesNotExist:
             return City.add(city_name)
 
-    def get_route_to(self, other_city):
+    def get_route_to(self, other_city, interval_start, interval_end):
         min_price = None
         try:
             # Not flexible solution should use CityFrom.to_ts and CityTo.from_ts timestamps as interval
-            response = requests.get(getRequest(self.api_code, other_city.api_code, CityFrom.from_ts, CityFrom.to_ts),
+            response = requests.get(get_request(self.api_code, other_city.api_code, interval_start, interval_end),
                                     headers=HEADER)
             data = response.json()
             for q in data['Quotes']:
-                if (min_price == None or q['MinPrice'] < min_price):
+                if min_price is None or q['MinPrice'] < min_price:
                     min_price = q['MinPrice']
         except Exception as exc:
             print(str(exc))
@@ -61,11 +60,14 @@ class Trip(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     completed = models.BooleanField(default=False)
     start_city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
-    start_day = models.DateField(default=timezone.now())
+    start_day = models.DateField(default=timezone.now)
     interval = models.DateField()
 
     def get_destinations(self):
         return Destination.objects.filter(trip=self)
+
+    def get_cities(self):
+        return [destination.city for destination in self.get_destinations()]
 
     def get_duration(self):
         return sum(destination.planned_days for destination in self.get_destinations())
@@ -80,11 +82,11 @@ class Trip(models.Model):
         }
 
     def traveling_salesman(self, dest):
-        return min([perm for perm in permutations([destination.city for destination in self.get_destinations()]) if
-                    (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == dest.name)], key=total_weight)
+        return min([perm for perm in permutations(self.get_cities()) if
+                    (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == dest.name)], key=self.total_weight)
 
-    def total_weight(self):
-        total_weight(self.traveling_salesman())
+    def total_weight(self, cities):
+        return sum([cities[i - 1].get_route_to(cities[i], self.start_day, self.interval) for i in range(1, len(cities))])
 
     @staticmethod
     def get_trips_of_user(user):
@@ -100,11 +102,8 @@ class Destination(models.Model):
         return {'city': self.city, 'days': self.planned_days}
 
 
-
-
-
-def getCityCodeRequest(city_name, currency="EUR", locale="en-US"):
-    return """http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/{country}/{currency}/{locale}?query={query}&apiKey={apiKey}""".format(
+def get_city_code_request(city_name, currency="EUR", locale="en-US"):
+    return "http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/{country}/{currency}/{locale}?query={query}&apiKey={apiKey}".format(
         country=USER_COUNTRY,
         currency=currency,
         locale=locale,
@@ -113,18 +112,14 @@ def getCityCodeRequest(city_name, currency="EUR", locale="en-US"):
     )
 
 
-def getRequest(originPlace, destinationPlace, outboundPartialDate, inboundPartialDate, currency="EUR", locale="en-US"):
-    return """http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/{country}/{currency}/{locale}/{originPlace}/{destinationPlace}/{outboundPartialDate}/{inboundPartialDate}?apiKey={apiKey}""".format(
+def get_request(origin_place, destination_place, outbound_partial_date, inbound_partial_date, currency="EUR", locale="en-US"):
+    return "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/{country}/{currency}/{locale}/{originPlace}/{destinationPlace}/{outboundPartialDate}/{inboundPartialDate}?apiKey={apiKey}".format(
         country=USER_COUNTRY,
         currency=currency,
         locale=locale,
-        originPlace=originPlace,
-        destinationPlace=destinationPlace,
-        outboundPartialDate=outboundPartialDate,
-        inboundPartialDate=inboundPartialDate,
+        originPlace=origin_place,
+        destinationPlace=destination_place,
+        outboundPartialDate=outbound_partial_date,
+        inboundPartialDate=inbound_partial_date,
         apiKey=SKY_SCANNER_API_KEY
     )
-
-
-def total_weight(cities):
-    return sum([cities[i - 1].get_route_to(cities[i]) for i in range(1, len(cities))])
