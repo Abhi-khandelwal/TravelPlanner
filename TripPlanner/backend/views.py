@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Trip
 
 
+# Create your views here.
 def index(request):
     return render(request, 'backend/index.html')
 
@@ -14,14 +15,6 @@ def index(request):
 def dashboard(request):
     trips = [trip.get_data() for trip in Trip.get_trips_of_user(request.user)]
     return render(request, 'backend/dashboard.html', {'trips': trips, 'username': request.user.username})
-
-
-@login_required(login_url='/admin/login/')
-def create_trip(request):
-    trip_name = request.POST.get('trip_name', "")
-    city_names = request.POST.getlist('cities[]', [])
-    print(city_names)
-    return HttpResponse()
 
 
 def user_login(request):
