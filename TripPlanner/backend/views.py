@@ -10,6 +10,11 @@ def index(request):
     return render(request, 'backend/index.html')
 
 
+@login_required
+def dashboard(request):
+    return render(request, 'backend/dashboard.html')
+
+
 def user_login(request):
     username = request.POST.get('username', "")
     password = request.POST.get('password', "")
