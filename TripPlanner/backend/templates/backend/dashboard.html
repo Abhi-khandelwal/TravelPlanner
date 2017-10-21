@@ -11,16 +11,43 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 <body>
+  <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">TripPlanner</a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ml-auto">
+        <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#loginModal">Login</a>
+        <a class="nav-item nav-link" href="#">About</a>
+        <a class="nav-item nav-link" href="#">Contact</a>
+      </div>
+    </div>
+  </nav>
   Hello {{ username }}<br>
   {% for trip in trips %}
-    {{ trip.name }}
-    {% for destination in trip.destinations %}
-      {{ destination.city }}
-    {% endfor %}
+  {{ trip.name }}
+  {% for destination in trip.destinations %}
+  {{ destination.city }}
+  {% endfor %}
   {% empty %}
-      You have no trips.
+  You have no trips.
   {% endfor %}
   <div class="maf container">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">Active</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li>
+    </ul>
     <form>
       <div class="form-group">
         <div class="row">
@@ -48,82 +75,18 @@
             <label for="destination-1">Destination 1:</label>
           </div>
           <div class="col-4">
-            <input type="text" class="form-control" id="destination-1"></>
+            <input type="text" class="form-control" id="destination-1" name="destination-1"></>
           </div>
           <div class="col-2">
-            <input type="number" class="form-control" id="destination-1" placeholder="DUR">
+            <input type="number" class="form-control" id="destination-duration-1" name="destination-duration-1" placeholder="DUR">
           </div>
           <div class="col-2">
-            <button class="btn btn-danger">Delete</button>
+            <button class="btn btn-outline-danger">Delete</button>
           </div>
         </div>
       </div>
-      <div class="form-group">
-        <div class="row">
-          <div class="col-4">
-            <label for="destination-1">Destination 1:</label>
-          </div>
-          <div class="col-4">
-            <input type="text" class="form-control" id="destination-1">
-          </div>
-          <div class="col-2">
-            <input type="number" class="form-control" id="destination-1" placeholder="DUR">
-          </div>
-          <div class="col-2">
-            <button class="btn btn-danger">Delete</button>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="row">
-          <div class="col-4">
-            <label for="destination-1">Destination 1:</label>
-          </div>
-          <div class="col-4">
-            <input type="text" class="form-control" id="destination-1">
-          </div>
-          <div class="col-2">
-            <input type="number" class="form-control" id="destination-1" placeholder="DUR">
-          </div>
-          <div class="col-2">
-            <button class="btn btn-danger">Delete</button>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="row">
-          <div class="col-4">
-            <label for="destination-1">Destination 1:</label>
-          </div>
-          <div class="col-4">
-            <input type="text" class="form-control" id="destination-1">
-          </div>
-          <div class="col-2">
-            <input type="number" class="form-control" id="destination-1" placeholder="DUR">
-          </div>
-          <div class="col-2">
-            <button class="btn btn-danger">Delete</button>
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="row">
-          <div class="col-4">
-            <label for="destination-1">Destination 1:</label>
-          </div>
-          <div class="col-4">
-            <input type="text" class="form-control" id="destination-1">
-          </div>
-          <div class="col-2">
-            <input type="number" class="form-control" id="destination-1" placeholder="DUR">
-          </div>
-          <div class="col-2">
-            <button class="btn btn-danger">Delete</button>
-          </div>
-        </div>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Plan it!</button>
+      <button type="submit" class="btn btn-outline-primary">Plan it!</button>
+      <button type="submit" class="btn btn-outline-primary">Plan it!</button>
     </form>
   </div>
   <div class="map-container">
@@ -134,7 +97,12 @@
       var uluru = {lat: -25.363, lng: 131.044};
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
-        center: uluru
+        center: uluru,
+        styles: [{
+          stylers: [{
+            saturation: -100
+          }]
+        }],
       });
       var marker = new google.maps.Marker({
         position: uluru,

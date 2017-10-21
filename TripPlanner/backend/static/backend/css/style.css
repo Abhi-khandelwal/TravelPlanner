@@ -105,18 +105,22 @@
   background-color: rgba(0, 0, 0, 0.35);
 }
 
-.btn-outline-primary{
+.btn{
+  border-radius: 0;
+}
+.login-btn{
   border-color: #fff;
   color: #fff;
 }
 
-.btn-outline-primary:hover{
+.login-btn:hover{
   background-color: #fff;
   border-color: #fff;
   color: #fff;
 }
 
 .login-input{
+  color: #fff;
   border-radius: 0px;
   border: none;
   background-color: transparent;
