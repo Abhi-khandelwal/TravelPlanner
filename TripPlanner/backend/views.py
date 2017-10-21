@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
@@ -20,6 +21,33 @@ def user_login(request):
         return redirect('yay')
     else:
         return redirect('nay')
+
+
+def user_registration(request):
+    firstname = request.POST.get('first_name', "")
+    lastname = request.POST.get('last_name', "")
+    username = request.POST.get('username', "")
+    email = request.POST.get('email', "")
+    password = request.POST.get('password', "")
+    password_again = request.POST.get('password_again', "")
+    if username == "":
+        return render(request, 'backend/register.html')
+
+    users = User.objects.all()
+
+    if users.filter(username=username).exists():
+        return HttpResponse("Username is already taken.")
+
+    for user in users:
+        if user.email == email:
+            return HttpResponse("You already registered with another email address.")
+
+    if password != password_again:
+        return HttpResponse("Password mismatch detected.")
+
+    User.objects.create_user(username=username, email=email,
+                             first_name=firstname, last_name=lastname, password=password)
+
 
 
 @login_required

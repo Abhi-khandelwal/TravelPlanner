@@ -7,6 +7,8 @@
 <body>
     <form action="/site/register" method="post">
          {% csrf_token %}
+        <input name="first_name" placeholder="first name">
+        <input name="last_name" placeholder="last name">
         <input name="username" placeholder="username">
         <input name="email" placeholder="email">
         <input name="password" type="password" placeholder="password">
