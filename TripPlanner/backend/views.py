@@ -21,6 +21,7 @@ def dashboard(request):
 def create_trip(request):
     trip_name = request.POST.get('trip_name', "")
     trip_date = datetime.strptime(request.POST.get('trip_date', ""), '%Y-%m-%d')
+    start_city = City.get_or_add(request.POST.get('start_city', ''))
     trip = Trip(name=trip_name, user=request.user, start_day=trip_date)
     city_names = request.POST.getlist('cities[]', [])
     city_days = request.POST.getlist('days[]', [])

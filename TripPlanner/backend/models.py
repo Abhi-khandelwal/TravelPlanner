@@ -40,6 +40,7 @@ class Trip(models.Model):
     name = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     completed = models.BooleanField(default=False)
+    start_city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
     start_day = models.DateField(default=timezone.now())
 
     def get_destinations(self):
