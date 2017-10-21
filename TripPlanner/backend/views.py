@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -9,18 +10,23 @@ def index(request):
 
 
 def user_login(request):
-    username = request.POST['username']
-    password = request.POST['password']
+    username = request.POST.get('username', "")
+    password = request.POST.get('password', "")
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        return redirect('/yay')
+        return redirect('yay')
     else:
-        return redirect('/nay')
+        return redirect('nay')
+
+
+@login_required
+def hidden(request):
+    return HttpResponse("hidden")
 
 
 def yay(request):
-    html = "<html><body> Succesful login </body></html>"
+    html = "<html><body> Successful login </body></html>"
     return HttpResponse(html)
 
 
