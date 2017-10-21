@@ -14,7 +14,7 @@ def index(request):
 @login_required(login_url='/admin/login/')
 def dashboard(request):
     trips = [trip.get_data() for trip in Trip.get_trips_of_user(request.user)]
-    return render(request, 'backend/dashboard.html', {'trips': trips})
+    return render(request, 'backend/dashboard.html', {'trips': trips, 'username': request.user.username})
 
 
 def user_login(request):
