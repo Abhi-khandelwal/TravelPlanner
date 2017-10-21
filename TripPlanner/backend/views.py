@@ -13,7 +13,7 @@ def index(request):
 
 @login_required(login_url='/site/login/')
 def dashboard(request):
-    trips = [trip.get_data() for trip in Trip.get_trips_of_user(request.user)]
+    trips = [{'data': trip.get_data(), 'sum': trip.traveling_salesman(trip.get_data()['destinations'][-1].city)} for trip in Trip.get_trips_of_user(request.user)]
     return render(request, 'backend/dashboard.html', {'trips': trips, 'username': request.user.username})
 
 
@@ -21,8 +21,9 @@ def dashboard(request):
 def create_trip(request):
     trip_name = request.POST.get('trip_name', "")
     trip_date = datetime.strptime(request.POST.get('trip_date', ""), '%Y-%m-%d')
+    interval = datetime.strptime(request.POST.get('interval', ""), '%Y-%m-%d')
     start_city = City.get_or_add(request.POST.get('start_city', ''))
-    trip = Trip(name=trip_name, user=request.user, start_day=trip_date)
+    trip = Trip(name=trip_name, user=request.user, start_day=trip_date, start_city=start_city, interval=interval)
     city_names = request.POST.getlist('cities[]', [])
     city_days = request.POST.getlist('days[]', [])
 

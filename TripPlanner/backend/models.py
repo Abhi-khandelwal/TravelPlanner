@@ -58,7 +58,6 @@ class City(models.Model):
 class Trip(models.Model):
     name = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    completed = models.BooleanField(default=False)
     start_city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
     start_day = models.DateField(default=timezone.now)
     interval = models.DateField()
@@ -81,9 +80,9 @@ class Trip(models.Model):
             'destinations': [destination.get_fields() for destination in self.get_destinations()]
         }
 
-    def traveling_salesman(self, dest):
+    def traveling_salesman(self, destination):
         return min([perm for perm in permutations(self.get_cities()) if
-                    (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == dest.name)], key=self.total_weight)
+                    (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == destination.name)], key=self.total_weight)
 
     def total_weight(self, cities):
         return sum([cities[i - 1].get_route_to(cities[i], self.start_day, self.interval) for i in range(1, len(cities))])
