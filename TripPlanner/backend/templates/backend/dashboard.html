@@ -24,7 +24,9 @@
       </div>
     </div>
   </nav>
-  Hello {{ username }}<br>
+  <div class="content-wrapper">
+
+  <!--Hello {{ username }}<br>
   {% for trip in trips %}
   {{ trip.name }}
   {% for destination in trip.destinations %}
@@ -32,8 +34,8 @@
   {% endfor %}
   {% empty %}
   You have no trips.
-  {% endfor %}
-  <div class="maf container">
+  {% endfor %}-->
+  <div class="maf">
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link active" href="#">Active</a>
@@ -48,70 +50,105 @@
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
     </ul>
-    <form>
-      <div class="form-group">
-        <div class="row">
-          <div class="col-4">
-            <label for="departure-from">Departure from:</label>
-          </div>
-          <div class="col-8">
-            <input type="text" class="form-control" id="departure-from">
-          </div>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="row">
-          <div class="col-4">
-            <label for="departure-date">Departure date:</label>
-          </div>
-          <div class="col-8">
-            <input type="date" class="form-control" id="departure-from">
+    <div class="container p-2 pt-4">
+      <form>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-4">
+              <label for="departure-from">Name:</label>
+            </div>
+            <div class="col-8">
+              <input type="text" class="form-control" id="departure-from">
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form-group">
-        <div class="row">
-          <div class="col-4">
-            <label for="destination-1">Destination 1:</label>
-          </div>
-          <div class="col-4">
-            <input type="text" class="form-control" id="destination-1" name="destination-1"></>
-          </div>
-          <div class="col-2">
-            <input type="number" class="form-control" id="destination-duration-1" name="destination-duration-1" placeholder="DUR">
-          </div>
-          <div class="col-2">
-            <button class="btn btn-outline-danger">Delete</button>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-4">
+              <label for="departure-from">Departure from:</label>
+            </div>
+            <div class="col-8">
+              <input type="text" class="form-control" id="departure-from">
+            </div>
           </div>
         </div>
-      </div>
-      <button type="submit" class="btn btn-outline-primary">Plan it!</button>
-      <button type="submit" class="btn btn-outline-primary">Plan it!</button>
-    </form>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-4">
+              <label>Departure date:</label>
+            </div>
+            <div class="col-3">
+              <input type="number" class="form-control" id="departure-from" name="departure-year" placeholder="Year">
+            </div>
+            <div class="col-3">
+              <input type="number" class="form-control" id="departure-from" name="departure-month" placeholder="Month">
+            </div>
+            <div class="col-2">
+              <input type="number" class="form-control" id="departure-from" name="departure-day" placeholder="Day">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-4">
+              <label>Arrival date:</label>
+            </div>
+            <div class="col-3">
+              <input type="number" class="form-control" id="departure-from" name="arrival-year" placeholder="Year">
+            </div>
+            <div class="col-3">
+              <input type="number" class="form-control" id="departure-from" name="arrival-month" placeholder="Month">
+            </div>
+            <div class="col-2">
+              <input type="number" class="form-control" id="departure-from" name="arrival-day" placeholder="Day">
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-4">
+              <label for="destination-1">Destination 1:</label>
+            </div>
+            <div class="col-4">
+              <input type="text" class="form-control" id="destination-1" name="destination-1">
+            </div>
+            <div class="col-2">
+              <input type="number" class="form-control" id="destination-duration-1" name="destination-duration-1" placeholder="DUR">
+            </div>
+            <div class="col-2">
+              <button class="btn btn-outline-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">+ Add destination</button>
+        <button type="submit" class="btn btn-outline-primary">Plan it!</button>
+      </form>
+    </div>
   </div>
   <div class="map-container">
     <div id="map"></div>
   </div>
-  <script>
-    function initMap() {
-      var uluru = {lat: -25.363, lng: 131.044};
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 4,
-        center: uluru,
-        styles: [{
-          stylers: [{
-            saturation: -100
-          }]
-        }],
-      });
-      var marker = new google.maps.Marker({
-        position: uluru,
-        map: map
-      });
-    }
-  </script>
-  <script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCw154iDc4QPDutxMAWdR9cYJAm3jB0vpU&callback=initMap">
+</div>
+<script>
+  function initMap() {
+    var uluru = {lat: -25.363, lng: 131.044};
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 4,
+      center: uluru,
+      styles: [{
+        stylers: [{
+          saturation: -100
+        }]
+      }],
+    });
+    var marker = new google.maps.Marker({
+      position: uluru,
+      map: map
+    });
+  }
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCw154iDc4QPDutxMAWdR9cYJAm3jB0vpU&callback=initMap">
 </script>
 <footer>
 </footer>
