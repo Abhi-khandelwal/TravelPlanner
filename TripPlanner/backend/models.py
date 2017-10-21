@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 import datetime
 
 
@@ -39,7 +40,7 @@ class Trip(models.Model):
     name = models.CharField(max_length=255)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     completed = models.BooleanField(default=False)
-    start_day = models.DateField()
+    start_day = models.DateField(default=timezone.now())
 
     def get_destinations(self):
         return Destination.objects.filter(trip=self)

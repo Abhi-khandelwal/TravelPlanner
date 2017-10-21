@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from .models import Trip
+from datetime import datetime
+from .models import Trip, City, Destination
 
 
 def index(request):
@@ -19,9 +20,21 @@ def dashboard(request):
 @login_required(login_url='/admin/login/')
 def create_trip(request):
     trip_name = request.POST.get('trip_name', "")
+    trip_date = datetime.strptime(request.POST.get('trip_date', ""), '%Y-%m-%d')
+    trip = Trip(name=trip_name, user=request.user, start_day=trip_date)
     city_names = request.POST.getlist('cities[]', [])
-    print(city_names)
-    return HttpResponse()
+    city_days = request.POST.getlist('days[]', [])
+
+    for name, days in zip(city_names, city_days):
+        city = City.get_or_add(name)
+        if city is None:
+            return HttpResponse("Invalid city name (no api response)")
+        else:
+            destination = Destination(trip=trip, city=city, planned_days=days)
+            destination.save()
+
+    trip.save()
+    return HttpResponse("Ok.")
 
 
 def user_login(request):
