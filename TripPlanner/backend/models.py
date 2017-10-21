@@ -50,6 +50,12 @@ class Trip(models.Model):
     def get_last_day(self):
         return self.start_day + datetime.timedelta(days=self.get_duration())
 
+    def get_data(self):
+        return {
+            'name': self.name,
+            'destinations': [destination.get_fields() for destination in self.get_destinations()]
+        }
+
     @staticmethod
     def get_trips_of_user(user):
         return Trip.objects.filter(user=user)
@@ -59,3 +65,6 @@ class Destination(models.Model):
     city = models.ForeignKey(City, on_delete=models.DO_NOTHING)
     planned_days = models.IntegerField()
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+
+    def get_fields(self):
+        return {'city': self.city, 'days': self.planned_days}

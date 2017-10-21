@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from .models import Trip
 
 
 # Create your views here.
@@ -10,9 +11,10 @@ def index(request):
     return render(request, 'backend/index.html')
 
 
-@login_required
+@login_required(login_url='/admin/login/')
 def dashboard(request):
-    return render(request, 'backend/dashboard.html')
+    trips = [trip.get_data() for trip in Trip.get_trips_of_user(request.user)]
+    return render(request, 'backend/dashboard.html', {'trips': trips})
 
 
 def user_login(request):
