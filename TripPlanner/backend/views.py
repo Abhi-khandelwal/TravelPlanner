@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -11,13 +11,13 @@ def index(request):
     return render(request, 'backend/index.html')
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/site/login/')
 def dashboard(request):
     trips = [trip.get_data() for trip in Trip.get_trips_of_user(request.user)]
     return render(request, 'backend/dashboard.html', {'trips': trips, 'username': request.user.username})
 
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/site/login/')
 def create_trip(request):
     trip_name = request.POST.get('trip_name', "")
     trip_date = datetime.strptime(request.POST.get('trip_date', ""), '%Y-%m-%d')
@@ -41,14 +41,17 @@ def create_trip(request):
 def user_login(request):
     username = request.POST.get('username', "")
     password = request.POST.get('password', "")
-    if username == "":
-        return render(request, 'backend/login.html')
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return redirect('yay')
-    else:
-        return redirect('nay')
+    next = request.GET.get('next', "/site")
+    print(next)
+    errors = []
+    if username != "":
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(str(next))
+        else:
+            errors.append("Username or password incorrect")
+    return render(request, 'backend/login.html', {'errors': errors, 'next': next})
 
 
 def user_registration(request):

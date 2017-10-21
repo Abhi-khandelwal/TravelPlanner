@@ -28,7 +28,7 @@
 	<div class="background">
 		<div class="container d-flex justify-content-center align-items-center">
 			<div class="login p-5">
-				<form action="/site/login" method="post">
+				<form action="/site/login?next={{ next }}" method="post">
 					{% csrf_token %}
 					<h1>Log in</h1>
 					<div class="form-group">
