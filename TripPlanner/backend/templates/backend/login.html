@@ -7,6 +7,9 @@
             <form action="/site/login?next={{ next }}" method="post">
                 {% csrf_token %}
                 <h1 class="mb-5">Log in</h1>
+                {% for error in errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
                 <div class="form-group">
                     <div class="row">
                         <div class="col-12">
