@@ -27,21 +27,21 @@
 	</nav>
 	<div class="background">
 		<div class="container d-flex justify-content-center align-items-center">
-			<div class="login p-5">
+			<div class="login p-4">
 				<form action="/site/login?next={{ next }}" method="post">
 					{% csrf_token %}
-					<h1>Log in</h1>
+					<h1 class="mb-5">Log in</h1>
 					<div class="form-group">
 						<div class="row">
-							<div>
-								<input type="text" class="login-input" id="destination-1" placeholder="Username" name="username">
+							<div class="col-12">
+								<input type="text" class="login-input" placeholder="Username" name="username">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div>
-								<input type="password" class="login-input" id="destination-1" placeholder="Password" name="password">
+							<div class="col-12">
+								<input type="password" class="login-input" placeholder="Password" name="password">
 							</div>
 						</div>
 					</div>

@@ -19,7 +19,7 @@
     <a class="navbar-brand" href="#">TripPlanner</a>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#loginModal">Login</a>
+        <a class="nav-item nav-link" href="#">Login</a>
         <a class="nav-item nav-link" href="#">About</a>
         <a class="nav-item nav-link" href="#">Contact</a>
       </div>
@@ -52,7 +52,7 @@
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
     </ul>
-    <div class="container p-2 pt-4">
+    <div class="dashboard-container p-2 pt-4">
       <form method="post" action="/site/addtrip">
         {% csrf_token %}
         <div class="form-group">

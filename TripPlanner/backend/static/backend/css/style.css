@@ -74,6 +74,10 @@
 }
 
 .container {
+  min-height: 100vh;
+}
+
+.dashboard-container {
   min-height: calc(100vh-56px);
 }
 
@@ -105,7 +109,7 @@
 
 .login{
   color: #fff;
-  border: 2px #fff solid;
+  /*border: 2px #fff solid;*/
   background-color: rgba(0, 0, 0, 0.35);
   width:50%;
 }
