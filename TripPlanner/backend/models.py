@@ -60,8 +60,8 @@ class City(models.Model):
 
     def get_route_to(self, other_city, interval_start, interval_end):
         min_price = None
-        date = None
-        carrier = None
+        date = 0
+        carrier = ""
         carrier_dict = {}
         try:
             # Not flexible solution should use CityFrom.to_ts and CityTo.from_ts timestamps as interval
@@ -75,13 +75,13 @@ class City(models.Model):
                         carrier = q['OutboundLeg']['CarrierIds']['Int']
                         date = q['OutboundLeg']['DepartureDate']
                     elif 'InboundLeg' in q:
-                        carrier = q['InboundLeg']['CarrierIds']['Int']
+                        carrier = q['InboundLeg']['CarrierIds']['Int'][0]
                         date = q['InboundLeg']['DepartureDate']
             for c in data['Carriers']:
                 carrier_dict.update({c['CarrierId']:c['Name']})
         except Exception as exc:
             print(str(exc))
-        print(self.name + ' -> ' + other_city.name + ': ' + str(min_price) +' dt:'+date+" Carrier: "+carrier_dict.get(carrier, None))
+        print(self.name + ' -> ' + other_city.name + ': ' + str(min_price) +' dt:'+date+" Carrier: "+carrier_dict.get(carrier, ""))
         return min_price
 
     def get_hotels(self):
