@@ -184,3 +184,7 @@ input{
   display:block;
   font-weight: bold;
 }
+
+.result-container{
+  border-top: 1px solid #dddddd;
+}
