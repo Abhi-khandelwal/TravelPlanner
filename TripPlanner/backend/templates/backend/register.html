@@ -1,71 +1,37 @@
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TripPlanner</title>
+{% extends 'backend/base.html' %}
 
-    <link href="/static/backend/css/vendor/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/backend/css/slick.css" rel="stylesheet">
-    <link href="/static/backend/css/style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="#">TripPlanner</a>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav ml-auto">
-                <a class="nav-item nav-link" href="#" data-toggle="modal" data-target="#loginModal">Login</a>
-                <a class="nav-item nav-link" href="#">About</a>
-                <a class="nav-item nav-link" href="#">Contact</a>
-            </div>
-        </div>
-    </nav>
-    <div class="background">
-        <div class="container d-flex justify-content-center align-items-center">
-            <div class="login p-4">
-                <form action="/site/register" method="post">
-                    {% csrf_token %}
-                    <h1>Sign up</h1>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-12">
-                                <input type="text" class="login-input" name="first_name" placeholder="First name">
-                            </div>
-                            <div class="col-12">
-                                <input type="text" class="login-input" name="last_name" placeholder="Last name">
-                            </div>
-                            <div class="col-12">
-                                <input type="text" class="login-input" name="username" placeholder="Username">
-                            </div>
-                            <div class="col-12">
-                                <input type="text" class="login-input" name="email" placeholder="E-mail address">
-                            </div>
-                            <div class="col-12">
-                                <input type="password" class="login-input" name="password" placeholder="Password">
-                            </div>
-                            <div class="col-12">
-                                <input type="password" class="login-input" placeholder="Password again" name="password_again">
-                            </div>
+{% block content %}
+<div class="background">
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="login p-4">
+            <form action="/site/register" method="post">
+                {% csrf_token %}
+                <h1>Sign up</h1>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="text" class="login-input" name="first_name" placeholder="First name">
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="login-input" name="last_name" placeholder="Last name">
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="login-input" name="username" placeholder="Username">
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="login-input" name="email" placeholder="E-mail address">
+                        </div>
+                        <div class="col-12">
+                            <input type="password" class="login-input" name="password" placeholder="Password">
+                        </div>
+                        <div class="col-12">
+                            <input type="password" class="login-input" placeholder="Password again" name="password_again">
                         </div>
                     </div>
-                    <button class="btn btn-outline-primary login-btn">Ok</button>
-                </form>
-            </div>
+                </div>
+                <button class="btn btn-outline-primary login-btn">Ok</button>
+            </form>
         </div>
     </div>
 </div>
-<footer>
-</footer>
-
-<script src="/static/backend/js/vendor/jquery-3.2.1.min.js"></script>
-<script src="/static/backend/js/vendor/bootstrap.min.js"></script>
-<script src="/static/backend/js/main.js"></script>
-
-</body>
-</html>
-
+{% endblock %}
