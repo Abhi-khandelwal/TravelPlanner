@@ -72,16 +72,16 @@ class City(models.Model):
                 if min_price is None or q['MinPrice'] < min_price:
                     min_price = q['MinPrice']
                     if 'OutboundLeg' in q:
-                        carrier = q['OutboundLeg']['CarrierIds']['Int']
+                        carrier = q['OutboundLeg']['CarrierIds'][0]
                         date = q['OutboundLeg']['DepartureDate']
                     elif 'InboundLeg' in q:
-                        carrier = q['InboundLeg']['CarrierIds']['Int'][0]
+                        carrier = q['InboundLeg']['CarrierIds'][0]
                         date = q['InboundLeg']['DepartureDate']
             for c in data['Carriers']:
                 carrier_dict.update({c['CarrierId']:c['Name']})
         except Exception as exc:
             print(str(exc))
-        print(self.name + ' -> ' + other_city.name + ': ' + str(min_price) +' dt:'+date+" Carrier: "+carrier_dict.get(carrier, ""))
+        print(self.name + ' -> ' + other_city.name + ': ' + str(min_price) +' dt: '+str(date)+" Carrier: "+carrier_dict.get(carrier, ""))
         return min_price
 
     def get_hotels(self):
