@@ -83,7 +83,7 @@ class City(models.Model):
         except Exception as exc:
             print(str(exc))
         print(self.name + ' -> ' + other_city.name + ': ' + str(min_price) +' dt: '+str(date)+" Carrier: "+carrier_dict.get(carrier, ""))
-        return min_price
+        return {'price': min_price, 'date': date, 'carrier': carrier_dict.get(carrier, ""), 'hotel': other_city.get_cheapest_hotel_for_date(date)}
 
     def get_cheapest_hotel_for_date(self, date):
         # api keres, parameter: self.api_code
@@ -125,10 +125,10 @@ class Trip(models.Model):
 
     def total_weight(self, cities):
         prices = [cities[i - 1].get_route_to(cities[i], self.start_day, self.interval) for i in range(1, len(cities))]
-        if None in prices:
+        if None in [price['price'] for price in prices]:
             return {'prices': prices, 'sum': sys.maxsize}
         else:
-            return {'prices': prices, 'sum': sum(prices)}
+            return {'prices': prices, 'sum': sum([price['price'] for price in prices])}
 
     @staticmethod
     def get_trips_of_user(user):
