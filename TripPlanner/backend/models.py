@@ -8,6 +8,7 @@ from django.utils import timezone
 
 
 SKY_SCANNER_API_KEY = "ha696723343441434034465280137182"
+GECODING_API_KEY = "AIzaSyBNpVsMQP_FXXE5t2nOeN0PIftHfBZNnQY"
 HEADER = {'Accept': 'application/json'}
 USER_COUNTRY = "HU"
 
@@ -15,9 +16,26 @@ USER_COUNTRY = "HU"
 class City(models.Model):
     name = models.CharField(max_length=255)
     api_code = models.CharField(max_length=100)
+    latitude = models.CharField(max_length=255, blank=True)
+    longitude = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.name
+
+    def get_data(self):
+        return {'name': self.name, 'latitude': self.latitude, 'longitude': self.longitude}
+
+    def query_coords(self):
+        request = "https://maps.googleapis.com/maps/api/geocode/json?address={city}&key={apiKey}".format(
+            city=self.name,
+            apiKey=GECODING_API_KEY)
+        try:
+            response = requests.get(request)
+            data = response.json()
+            self.latitude = data['results'][0]['geometry']['location']['lat']
+            self.longitude = data['results'][0]['geometry']['location']['lng']
+        except Exception as exc:
+            print(str(exc))
 
     @staticmethod
     def add(city_name):
@@ -27,6 +45,7 @@ class City(models.Model):
         for p in data['Places']:
             if city_name.lower() == p['PlaceName'].lower() and city_name[0].lower() == p['CityId'][0].lower():
                 city = City(name=city_name, api_code=p['CityId'][:4])
+                city.query_coords()
                 city.save()
                 return city
 
@@ -110,7 +129,7 @@ class Destination(models.Model):
         return str(self.city) + str(self.planned_days)
 
     def get_fields(self):
-        return {'city': self.city, 'days': self.planned_days}
+        return {'city': self.city.get_data(), 'days': self.planned_days}
 
 
 def get_city_code_request(city_name, currency="EUR", locale="en-US"):

@@ -1,23 +1,26 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from .models import Trip, City, Destination
+
+
+LOGIN_URL = '/site/login/'
 
 
 def index(request):
     return render(request, 'backend/index.html')
 
 
-@login_required(login_url='/site/login/')
+@login_required(login_url=LOGIN_URL)
 def dashboard(request):
     trips = [{'data': trip.get_data(), 'sum': trip.total_weight(trip.traveling_salesman(trip.get_data()['destinations'][-1]['city']))} for trip in Trip.get_trips_of_user(request.user)]
     return render(request, 'backend/dashboard.html', {'trips': trips, 'username': request.user.username})
 
 
-@login_required(login_url='/site/login/')
+@login_required(login_url=LOGIN_URL)
 def create_trip(request):
     trip_name = request.POST.get('name', "")
     start_time = "{0}-{1}-{2}".format(request.POST.get('departure-year', ""), request.POST.get('departure-month', ""), request.POST.get('departure-day', ""))
@@ -83,3 +86,8 @@ def user_registration(request):
     User.objects.create_user(username=username, email=email,
                              first_name=firstname, last_name=lastname, password=password)
     return HttpResponse("registration was successful")
+
+@login_required(login_url=LOGIN_URL)
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect("/site")
