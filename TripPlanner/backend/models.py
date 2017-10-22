@@ -5,6 +5,7 @@ from django.db import models
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+import sys
 
 
 SKY_SCANNER_API_KEY = "ha696723343441434034465280137182"
@@ -84,9 +85,9 @@ class City(models.Model):
         print(self.name + ' -> ' + other_city.name + ': ' + str(min_price) +' dt: '+str(date)+" Carrier: "+carrier_dict.get(carrier, ""))
         return min_price
 
-    def get_hotels(self):
+    def get_cheapest_hotel_for_date(self, date):
         # api keres, parameter: self.api_code
-        return None
+        return ""
 
 
 class Trip(models.Model):
@@ -119,14 +120,13 @@ class Trip(models.Model):
 
     def traveling_salesman(self, destination):
         m = min([perm for perm in permutations(self.get_cities()) if
-                    (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == destination['name'])], key=self.total_weight)
-        print("Salesman return", m)
+                    (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == destination['name'])], key=lambda x:self.total_weight(x)['sum'])
         return m
 
     def total_weight(self, cities):
         prices = [cities[i - 1].get_route_to(cities[i], self.start_day, self.interval) for i in range(1, len(cities))]
         if None in prices:
-            return {'prices': prices, 'sum': 0}
+            return {'prices': prices, 'sum': sys.maxsize}
         else:
             return {'prices': prices, 'sum': sum(prices)}
 

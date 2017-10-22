@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from .models import Trip, City, Destination
+import sys
 
 
 LOGIN_URL = '/site/login/'
@@ -16,7 +17,16 @@ def index(request):
 
 @login_required(login_url=LOGIN_URL)
 def dashboard(request):
-    trips = [{'data': trip.get_data(), 'money': trip.total_weight(trip.traveling_salesman(trip.get_data()['destinations'][-1]['city']))} for trip in Trip.get_trips_of_user(request.user)]
+    trips = []
+    for trip in Trip.get_trips_of_user(request.user):
+        data = trip.get_data()
+        cost = trip.total_weight(trip.traveling_salesman(trip.get_data()['destinations'][-1]['city']))
+        if cost['sum'] == sys.maxsize:
+            cost['sum'] = 0
+        trips.append({
+            'data': data,
+            'money': cost,
+        })
     return render(request, 'backend/dashboard.html', {'trips': trips, 'username': request.user.username})
 
 
