@@ -42,13 +42,13 @@ def create_trip(request):
             destination.save()
 
     print("Saving")
-    return HttpResponse("/site/dashboard")
+    return HttpResponseRedirect("/site/dashboard")
 
 
 def user_login(request):
     username = request.POST.get('username', "")
     password = request.POST.get('password', "")
-    next = request.GET.get('next', "/site")
+    next = request.GET.get('next', "/site/dashboard")
     print(next)
     errors = []
     if username != "":
@@ -85,7 +85,7 @@ def user_registration(request):
 
     User.objects.create_user(username=username, email=email,
                              first_name=firstname, last_name=lastname, password=password)
-    return HttpResponse("registration was successful")
+    return HttpResponseRedirect("/site/login")
 
 @login_required(login_url=LOGIN_URL)
 def user_logout(request):
