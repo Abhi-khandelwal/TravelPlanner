@@ -16,8 +16,12 @@ class City(models.Model):
     name = models.CharField(max_length=255)
     api_code = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.name
+
     @staticmethod
     def add(city_name):
+        print("Calling with", city_name)
         response = requests.get(get_city_code_request(city_name), headers=HEADER)
         data = response.json()
         for p in data['Places']:
@@ -62,11 +66,14 @@ class Trip(models.Model):
     start_day = models.DateField(default=timezone.now)
     interval = models.DateField()
 
+    def __str__(self):
+        return self.name
+
     def get_destinations(self):
         return Destination.objects.filter(trip=self)
 
     def get_cities(self):
-        return [destination.city for destination in self.get_destinations()]
+        return [self.start_city] + [destination.city for destination in self.get_destinations()]
 
     def get_duration(self):
         return sum(destination.planned_days for destination in self.get_destinations())
@@ -81,8 +88,10 @@ class Trip(models.Model):
         }
 
     def traveling_salesman(self, destination):
-        return min([perm for perm in permutations(self.get_cities()) if
+        m = min([perm for perm in permutations(self.get_cities()) if
                     (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == destination.name)], key=self.total_weight)
+        print("Salesman return", m)
+        return m
 
     def total_weight(self, cities):
         return sum([cities[i - 1].get_route_to(cities[i], self.start_day, self.interval) for i in range(1, len(cities))])
@@ -97,12 +106,15 @@ class Destination(models.Model):
     planned_days = models.IntegerField()
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.city) + str(self.planned_days)
+
     def get_fields(self):
         return {'city': self.city, 'days': self.planned_days}
 
 
 def get_city_code_request(city_name, currency="EUR", locale="en-US"):
-    return "http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/{country}/{currency}/{locale}?query={query}&apiKey={apiKey}".format(
+    return """http://partners.api.skyscanner.net/apiservices/autosuggest/v1.0/{country}/{currency}/{locale}?query={query}&apiKey={apiKey}""".format(
         country=USER_COUNTRY,
         currency=currency,
         locale=locale,
@@ -112,7 +124,7 @@ def get_city_code_request(city_name, currency="EUR", locale="en-US"):
 
 
 def get_request(origin_place, destination_place, outbound_partial_date, inbound_partial_date, currency="EUR", locale="en-US"):
-    return "http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/{country}/{currency}/{locale}/{originPlace}/{destinationPlace}/{outboundPartialDate}/{inboundPartialDate}?apiKey={apiKey}".format(
+    return """http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/{country}/{currency}/{locale}/{originPlace}/{destinationPlace}/{outboundPartialDate}/{inboundPartialDate}?apiKey={apiKey}""".format(
         country=USER_COUNTRY,
         currency=currency,
         locale=locale,

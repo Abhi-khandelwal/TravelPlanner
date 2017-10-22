@@ -30,8 +30,9 @@
   <!--Hello {{ username }}<br>
   {% for trip in trips %}
   {{ trip.name }}
-  {% for destination in trip.destinations %}
-  {{ destination.city }}
+  {{ trip.sum }}
+  {% for destination in trip.data.destinations %}
+  {{ destination.city.name }}
   {% endfor %}
   {% empty %}
   You have no trips.
@@ -52,7 +53,7 @@
       </li>
     </ul>
     <div class="container p-2 pt-4">
-      <form method="post">
+      <form method="post" action="/site/addtrip">
         {% csrf_token %}
         <div class="form-group">
           <div class="row">

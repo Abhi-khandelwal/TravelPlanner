@@ -13,21 +13,24 @@ def index(request):
 
 @login_required(login_url='/site/login/')
 def dashboard(request):
-    trips = [{'data': trip.get_data(), 'sum': trip.traveling_salesman(trip.get_data()['destinations'][-1].city)} for trip in Trip.get_trips_of_user(request.user)]
+    trips = [{'data': trip.get_data(), 'sum': trip.total_weight(trip.traveling_salesman(trip.get_data()['destinations'][-1]['city']))} for trip in Trip.get_trips_of_user(request.user)]
     return render(request, 'backend/dashboard.html', {'trips': trips, 'username': request.user.username})
 
 
 @login_required(login_url='/site/login/')
 def create_trip(request):
-    trip_name = request.POST.get('trip_name', "")
-    trip_date = datetime.strptime(request.POST.get('trip_date', ""), '%Y-%m-%d')
-    interval = datetime.strptime(request.POST.get('interval', ""), '%Y-%m-%d')
-    start_city = City.get_or_add(request.POST.get('start_city', ''))
+    trip_name = request.POST.get('name', "")
+    start_time = "{0}-{1}-{2}".format(request.POST.get('departure-year', ""), request.POST.get('departure-month', ""), request.POST.get('departure-day', ""))
+    trip_date = datetime.strptime(start_time, '%Y-%m-%d')
+    interval_time = "{0}-{1}-{2}".format(request.POST.get('arrival-year', ""), request.POST.get('arrival-month', ""), request.POST.get('arrival-day', ""))
+    interval = datetime.strptime(interval_time, '%Y-%m-%d')
+    start_city = City.get_or_add(request.POST.get('departure-from', ''))
     trip = Trip(name=trip_name, user=request.user, start_day=trip_date, start_city=start_city, interval=interval)
-    city_names = request.POST.getlist('cities[]', [])
-    city_days = request.POST.getlist('days[]', [])
+    trip.save()
+    city_names = request.POST.getlist('destinations[]', [])
+    city_days = request.POST.getlist('destination-durations[]', [])
 
-    for name, days in zip(city_names, city_days):
+    for (name, days) in zip(city_names, city_days):
         city = City.get_or_add(name)
         if city is None:
             return HttpResponse("Invalid city name (no api response)")
@@ -35,7 +38,7 @@ def create_trip(request):
             destination = Destination(trip=trip, city=city, planned_days=days)
             destination.save()
 
-    trip.save()
+    print("Saving")
     return HttpResponse("Ok.")
 
 
