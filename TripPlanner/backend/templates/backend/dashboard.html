@@ -58,7 +58,7 @@
               <label for="departure-from">Name:</label>
             </div>
             <div class="col-8">
-              <input type="text" class="form-control" id="departure-from">
+              <input type="text" class="form-control" id="departure-from" name="name">
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@
               <label for="departure-from">Departure from:</label>
             </div>
             <div class="col-8">
-              <input type="text" class="form-control" id="departure-from">
+              <input type="text" class="form-control" id="departure-from" name="departure-from">
             </div>
           </div>
         </div>
@@ -111,10 +111,10 @@
                 <label for="destination-1">Destination 1:</label>
               </div>
               <div class="col-4">
-                <input type="text" class="form-control" id="destination-1" name="destination-1">
+                <input type="text" class="form-control" id="destination-1" name="destinations[]">
               </div>
               <div class="col-2">
-                <input type="number" class="form-control" id="destination-duration-1" name="destination-duration-1" placeholder="DUR">
+                <input type="number" class="form-control" id="destination-duration-1" name="destination-durations[]" placeholder="DUR">
               </div>
               <div class="col-2">
                 <button class="btn btn-outline-danger">Delete</button>
