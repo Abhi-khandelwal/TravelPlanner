@@ -6,9 +6,20 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from .models import Trip, City, Destination
 import sys
+from django import template
+
+register = template.Library()
 
 
 LOGIN_URL = '/site/login/'
+
+
+@register.filter
+def return_item(l, i):
+    try:
+        return l[i]
+    except:
+        return None
 
 
 def index(request):
