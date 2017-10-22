@@ -166,3 +166,8 @@ input:-webkit-autofill {
 .content-wrapper {
   padding-top: 56px;
 }
+
+#addDestination {
+  display:block;
+  font-weight: bold;
+}
