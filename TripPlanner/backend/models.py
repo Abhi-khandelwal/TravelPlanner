@@ -60,6 +60,9 @@ class City(models.Model):
 
     def get_route_to(self, other_city, interval_start, interval_end):
         min_price = None
+        date = None
+        carrier = None
+        carrier_dict = {}
         try:
             # Not flexible solution should use CityFrom.to_ts and CityTo.from_ts timestamps as interval
             response = requests.get(get_request(self.api_code, other_city.api_code, interval_start, interval_end),
@@ -68,9 +71,14 @@ class City(models.Model):
             for q in data['Quotes']:
                 if min_price is None or q['MinPrice'] < min_price:
                     min_price = q['MinPrice']
+                    if 'OutboundLeg' in q:
+                        carrier = q['OutboundLeg']['CarrierIds']['Int']
+                        date = q['OutboundLeg']['DepartureDate']
+            for c in data['Carriers']:
+                carrier_dict.update({c['CarrierId']:c['Name']})
         except Exception as exc:
             print(str(exc))
-        print(self.name + ' -> ' + other_city.name + ': ' + str(min_price))
+        print(self.name + ' -> ' + other_city.name + ': ' + str(min_price) +' dt:'+date+" Carrier: "+carrier_dict.get(carrier))
         return min_price
 
     def get_hotels(self):
