@@ -1,3 +1,5 @@
+.gm-style-cc { display:none; }
+
 .navbar {
   background-color: rgba(0, 0, 0, 0.35);
   position: fixed;
@@ -126,7 +128,6 @@
   color: #fff;
   border-radius: 0px;
   border: none;
-
   background-color: transparent;
   border-bottom: 3px solid #fff;
   margin-bottom: 10px;
@@ -165,6 +166,14 @@ input:-webkit-autofill {
 
 .content-wrapper {
   padding-top: 56px;
+}
+
+input{
+  border-radius: 0px;
+}
+
+.form-control {
+  border-radius: 0px;
 }
 
 #addDestination {
