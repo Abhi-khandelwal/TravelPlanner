@@ -78,24 +78,27 @@ def user_registration(request):
     email = request.POST.get('email', "")
     password = request.POST.get('password', "")
     password_again = request.POST.get('password_again', "")
+    next = request.GET.get('next', "/site/dashboard")
+    errors = []
     if username == "":
         return render(request, 'backend/register.html', {'username': request.user.username})
 
     users = User.objects.all()
 
     if users.filter(username=username).exists():
-        return HttpResponse("Username is already taken.")
+        errors.append("Username already exists")
 
     for user in users:
         if user.email == email:
-            return HttpResponse("You already registered with another email address.")
+            errors.append("There is already a user with the e-mail address you provided")
 
     if password != password_again:
-        return HttpResponse("Password mismatch detected.")
+        errors.append("Password mismatch")
 
-    User.objects.create_user(username=username, email=email,
+    if len(errors) == 0:
+        User.objects.create_user(username=username, email=email,
                              first_name=firstname, last_name=lastname, password=password)
-    return HttpResponseRedirect("/site/login")
+    return render(request, 'backend/register.html', {'errors': errors, 'next': next, 'username': request.user.username})
 
 @login_required(login_url=LOGIN_URL)
 def user_logout(request):
