@@ -19,8 +19,12 @@
     <a class="navbar-brand" href="#">TripPlanner</a>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
-        <a class="nav-item nav-link" href="login">Login</a>
-        <a class="nav-item nav-link" href="register">Sign up</a>
+          {% if username %}
+            <a class="nav-item nav-link" href="logout">Log out</a>
+          {% else %}
+            <a class="nav-item nav-link" href="login">Login</a>
+            <a class="nav-item nav-link" href="register">Sign up</a>
+          {% endif %}
         <a class="nav-item nav-link" href="#">About</a>
         <a class="nav-item nav-link" href="#">Contact</a>
       </div>
