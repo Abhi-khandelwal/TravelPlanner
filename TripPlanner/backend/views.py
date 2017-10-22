@@ -11,7 +11,7 @@ LOGIN_URL = '/site/login/'
 
 
 def index(request):
-    return render(request, 'backend/index.html')
+    return render(request, 'backend/index.html', {'username': request.user.username})
 
 
 @login_required(login_url=LOGIN_URL)
@@ -42,7 +42,7 @@ def create_trip(request):
             destination.save()
 
     print("Saving")
-    return HttpResponse("Ok.")
+    return HttpResponse("/site/dashboard")
 
 
 def user_login(request):
@@ -58,7 +58,7 @@ def user_login(request):
             return HttpResponseRedirect(str(next))
         else:
             errors.append("Username or password incorrect")
-    return render(request, 'backend/login.html', {'errors': errors, 'next': next})
+    return render(request, 'backend/login.html', {'errors': errors, 'next': next, 'username': request.user.username})
 
 
 def user_registration(request):
@@ -69,7 +69,7 @@ def user_registration(request):
     password = request.POST.get('password', "")
     password_again = request.POST.get('password_again', "")
     if username == "":
-        return render(request, 'backend/register.html')
+        return render(request, 'backend/register.html', {'username': request.user.username})
 
     users = User.objects.all()
 
