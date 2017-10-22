@@ -125,7 +125,10 @@ class Trip(models.Model):
 
     def total_weight(self, cities):
         prices = [cities[i - 1].get_route_to(cities[i], self.start_day, self.interval) for i in range(1, len(cities))]
-        return {'prices': prices, 'sum': sum(prices)}
+        if None in prices:
+            return {'prices': prices, 'sum': 0}
+        else:
+            return {'prices': prices, 'sum': sum(prices)}
 
     @staticmethod
     def get_trips_of_user(user):
