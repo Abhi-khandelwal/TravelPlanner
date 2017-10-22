@@ -30,7 +30,8 @@
   <!--Hello {{ username }}<br>
   {% for trip in trips %}
   {{ trip.name }}
-  {{ trip.sum }}
+  {{ trip.money.sum }}
+  {{ trip.money.prices }}
   {% for destination in trip.data.destinations %}
   {{ destination.city.name }}
   {% endfor %}

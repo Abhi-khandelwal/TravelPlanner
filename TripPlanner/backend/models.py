@@ -108,12 +108,13 @@ class Trip(models.Model):
 
     def traveling_salesman(self, destination):
         m = min([perm for perm in permutations(self.get_cities()) if
-                    (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == destination.name)], key=self.total_weight)
+                    (perm[0].name == self.start_city.name and perm[len(perm) - 1].name == destination['name'])], key=self.total_weight)
         print("Salesman return", m)
         return m
 
     def total_weight(self, cities):
-        return sum([cities[i - 1].get_route_to(cities[i], self.start_day, self.interval) for i in range(1, len(cities))])
+        prices = [cities[i - 1].get_route_to(cities[i], self.start_day, self.interval) for i in range(1, len(cities))]
+        return {'prices': prices, 'sum': sum(prices)}
 
     @staticmethod
     def get_trips_of_user(user):

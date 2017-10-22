@@ -16,7 +16,7 @@ def index(request):
 
 @login_required(login_url=LOGIN_URL)
 def dashboard(request):
-    trips = [{'data': trip.get_data(), 'sum': trip.total_weight(trip.traveling_salesman(trip.get_data()['destinations'][-1]['city']))} for trip in Trip.get_trips_of_user(request.user)]
+    trips = [{'data': trip.get_data(), 'money': trip.total_weight(trip.traveling_salesman(trip.get_data()['destinations'][-1]['city']))} for trip in Trip.get_trips_of_user(request.user)]
     return render(request, 'backend/dashboard.html', {'trips': trips, 'username': request.user.username})
 
 
