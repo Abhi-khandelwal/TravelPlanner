@@ -3,8 +3,8 @@ from django import template
 register = template.Library()
 
 @register.filter
-def return_item(l, i):
+def return_item(l, key):
     try:
-        return l[i]
+        return l.get(key)
     except:
         return None

@@ -3,18 +3,6 @@
 {% block content %}
   <div class="content-wrapper">
   <div class="maf">
-    <!--Hello {{ username }}<br>
-  {% for trip in trips %}
-  {{ trip.name }}
-  {{ trip.money.sum }}   <-ha ez nulla, akkor nem lehetséges az utazás
-  {{ trip.money.prices }}
-  {% for destination in trip.data.destinations %}
-  {{ destination.city.name }}
-  {% endfor %}
-  {% empty %}
-  You have no trips.
-  {% endfor %}-->
-
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link active tab" href="#" id="addTrip">Add trip</a>
@@ -88,17 +76,12 @@
       {% for trip in trips %}
       <div class="result-container mt-4 pt-2 hidden" id="{{ trip.data.name }}-result">
           <div class="row">
-          {% for destination in trip.data.destinations %}
-              <div class="col-2">
-                <h4>-></h4>
-              </div>
-              <div class="col-5">
-                <h4>{{ destination.city.name }}</h4>
-              </div>
-              <div class="col-5">
-                <h4>{% with a = trip.money.prices|return_item:forloop.counter0 %}{{b = a.price}}{% endwith %}</h4>
-              </div>
-          {% endfor %}
+            <div class="col-12">
+            <h4>{% for destination in trip.data.destinations %}
+            >{{ destination.city.name }}
+            {% endfor %}
+            </h4>
+            </div>
           </div>
           <h3 class="mt-3">Total price: {{ trip.money.sum }} $</h3>
       </div>
