@@ -56,4 +56,20 @@ function appendInput() {
     document.getElementById("addDestination").addEventListener("click", function (){
         appendInput();
     });
+    var elements =  Array.from(document.getElementsByClassName("tab"));
+    console.log(elements);
+		elements.forEach(function(element) {
+    	element.addEventListener("click", function(){
+    		elements.forEach(function(elem) {
+    			elem.classList.remove("active");
+    		})
+    		element.classList.add("active");
+
+    		Array.from(document.getElementsByClassName("result-container")).forEach(function(element){
+    			element.classList.add("hidden");
+    		});
+    		document.getElementById("addTrip-result").classList.add("hidden");
+    		document.getElementById(element.id+"-result").classList.remove("hidden");
+    	})
+	});
 })();

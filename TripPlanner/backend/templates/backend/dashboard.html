@@ -1,12 +1,12 @@
 {% extends 'backend/base.html' %}
-
+{% load sajat %}
 {% block content %}
   <div class="content-wrapper">
-
-  <!--Hello {{ username }}<br>
+  <div class="maf">
+    <!--Hello {{ username }}<br>
   {% for trip in trips %}
   {{ trip.name }}
-  {{ trip.money.sum }}
+  {{ trip.money.sum }}   <-ha ez nulla, akkor nem lehetséges az utazás
   {{ trip.money.prices }}
   {% for destination in trip.data.destinations %}
   {{ destination.city.name }}
@@ -14,23 +14,19 @@
   {% empty %}
   You have no trips.
   {% endfor %}-->
-  <div class="maf">
+
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <a class="nav-link active" href="#">Active</a>
+        <a class="nav-link active tab" href="#" id="addTrip">Add trip</a>
       </li>
+      {% for trip in trips %}
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link tab" href="#" id="{{ trip.data.name }}">{{ trip.data.name }}</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
-      </li>
+      {% endfor %}
     </ul>
-    <div class="dashboard-container p-2 pt-4">
-      <form method="post" action="/site/addtrip">
+    <div class="dashboard-container pt-4" >
+      <form method="post" action="/site/addtrip" id="addTrip-result">
         {% csrf_token %}
         <div class="form-group">
           <div class="row">
@@ -89,66 +85,24 @@
         <a href="#" class="mt-2" id="addDestination">+ Add destination</a>
         <button type="submit" class="btn btn-outline-primary mt-3">Plan it!</button>
       </form>
-      <div class="result-container mt-4 pt-2">
+      {% for trip in trips %}
+      <div class="result-container mt-4 pt-2 hidden" id="{{ trip.data.name }}-result">
           <div class="row">
-              <div class="col-4">
-                <h4>Budapest<h4>
-              </div>
+          {% for destination in trip.data.destinations %}
               <div class="col-2">
-                <h4>-><h4>
+                <h4>-></h4>
               </div>
-              <div class="col-3">
-                <h4>Budapest<h4>
+              <div class="col-5">
+                <h4>{{ destination.city.name }}</h4>
               </div>
-              <div class="col-3">
-                <h4>1670 $<h4>
+              <div class="col-5">
+                <h4>{% with a = trip.money.prices|return_item:forloop.counter0 %}{{b = a.price}}{% endwith %}</h4>
               </div>
+          {% endfor %}
           </div>
-          <div class="row">
-              <div class="col-4">
-                <h4>Budapest<h4>
-              </div>
-              <div class="col-2">
-                <h4>-><h4>
-              </div>
-              <div class="col-3">
-                <h4>Budapest<h4>
-              </div>
-              <div class="col-3">
-                <h4>1670 $<h4>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-4">
-                <h4>Budapest<h4>
-              </div>
-              <div class="col-2">
-                <h4>-><h4>
-              </div>
-              <div class="col-3">
-                <h4>Budapest<h4>
-              </div>
-              <div class="col-3">
-                <h4>1670 $<h4>
-              </div>
-          </div>
-          <div class="row">
-              <div class="col-4">
-                <h4>Budapest<h4>
-              </div>
-              <div class="col-2">
-                <h4>-><h4>
-              </div>
-              <div class="col-3">
-                <h4>Budapest<h4>
-              </div>
-              <div class="col-3">
-                <h4>1670 $<h4>
-              </div>
-          </div>
-
-          <h3 class="mt-3">Total price: 30000000000000 $</h3>
+          <h3 class="mt-3">Total price: {{ trip.money.sum }} $</h3>
       </div>
+      {% endfor %}
     </div>
   </div>
   <div class="map-container">

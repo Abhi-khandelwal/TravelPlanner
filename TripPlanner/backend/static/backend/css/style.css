@@ -98,12 +98,10 @@
   float: right;
   display: inline-block;
   width: 60%;
-  /*height: calc(100vh-56px);*/
 }
 
 #map {
   width: 100%;
-  /*height: 100%;*/
   height: calc(100vh - 56px);
 }
 
@@ -189,6 +187,6 @@ input{
   font-weight: bold;
 }
 
-.result-container{
-  border-top: 1px solid #dddddd;
+.hidden{
+  display: none;
 }
