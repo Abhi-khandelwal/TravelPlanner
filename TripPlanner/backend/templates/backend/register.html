@@ -27,49 +27,29 @@
     </nav>
     <div class="background">
         <div class="container d-flex justify-content-center align-items-center">
-            <div class="login p-5">
+            <div class="login p-4">
                 <form action="/site/register" method="post">
                     {% csrf_token %}
                     <h1>Sign up</h1>
                     <div class="form-group">
                         <div class="row">
-                            <div>
-                                <input type="text" class="login-input" id="destination-1" name="first_name" placeholder="First name">
+                            <div class="col-12">
+                                <input type="text" class="login-input" name="first_name" placeholder="First name">
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div>
-                                <input type="text" class="login-input" id="destination-1" name="last_name" placeholder="Last name">
+                            <div class="col-12">
+                                <input type="text" class="login-input" name="last_name" placeholder="Last name">
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div>
-                                <input type="text" class="login-input" id="destination-1" name="username" placeholder="Username">
+                            <div class="col-12">
+                                <input type="text" class="login-input" name="username" placeholder="Username">
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div>
-                                <input type="text" class="login-input" id="destination-1" name="email" placeholder="E-mail address">
+                            <div class="col-12">
+                                <input type="text" class="login-input" name="email" placeholder="E-mail address">
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div>
-                                <input type="password" class="login-input" id="destination-1"  name="password" placeholder="Password">
+                            <div class="col-12">
+                                <input type="password" class="login-input" name="password" placeholder="Password">
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div>
-                                <input type="password" class="login-input" id="destination-1" placeholder="Password again" name="password_again">
+                            <div class="col-12">
+                                <input type="password" class="login-input" placeholder="Password again" name="password_again">
                             </div>
                         </div>
                     </div>
