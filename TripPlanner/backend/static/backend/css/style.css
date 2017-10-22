@@ -74,7 +74,7 @@
 }
 
 .container {
-  min-height: 100vh;
+  min-height: calc(100vh-56px);
 }
 
 .bg-image {
@@ -162,6 +162,10 @@ input:-webkit-autofill {
 }
 .login-input::-ms-input-placeholder { /* Microsoft Edge */
   color: rgba(255, 255, 255, 0.7);
+}
+
+.nav-dashboard {
+  background-color: rgba(0,0,0,.8);
 }
 
 .content-wrapper {
